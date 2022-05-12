@@ -8,6 +8,13 @@ class Wordle:
         # self.user_letters = []
         # self.guessed = set()
 
+    # TODO figure out this logig and wtf I am going to do with this/HOW  
+    def change_color(self, list):
+        self.RED = "\033[31m"
+        self.GREEN = "\033[32m"
+        self.YELLOW = "\033[33m"
+        self.reset_color = "\033[0m"
+
     def get_word(self):
         # take input from a text file and chooses a word on random
         with open("wordsstart.txt") as read:
@@ -27,8 +34,8 @@ class Wordle:
             print(self.user_letters)
 
     def make_letter_list(self, word, list_name):
-        for x in range(len(word)):
-            list_name.append(word[x])
+        list_name += list(word)
+        print(list_name)
 
     def display_alphabet(self):
         # print the alphabet
@@ -53,15 +60,32 @@ class Wordle:
                     self.turns -= 1
                     self.is_win()
                     self.compare_guess()
-                    self.display_alphabet()
+                    # self.display_alphabet()
                 else:
                     print("Not a real word")
             self.is_lose()
 
     def compare_guess(self):
         # compare the list of chosen word to the list of guessed word
-        same_letters = any(x in self.user_letters for x in self.chosen_letters)
-        print(same_letters)
+        is_same = any(x in self.user_letters for x in self.chosen_letters)
+        if is_same == True:
+            # if guessed word letter is in chosen word but indexes do not match color change to yellow
+            similar_letters = [x for x in self.user_letters if x in self.chosen_letters]
+            # TODO FIX THIS
+            for i in range(len(self.chosen_word)):
+                 if self.user_letters[i] == self.chosen_letters[i] and self.chosen_letters[i] == self.user_letters[i]:
+                    same_letters = self.user_letters[i]
+                    print(same_letters)
+                # TODO write a code to remove the duplicate letters in the similar_letter list
+            print(similar_letters)
+            
+            # if guessed word letter is in chosen word AND indexes are the same change to green
+
+            # if guessed word letter is not in chosen word no color change
+        #if none of the letters are the same
+        else:
+            pass
+        # print the guessed word out with following parameters
 
     def is_win(self):
         if self.user_guess == self.chosen_word:
@@ -78,14 +102,9 @@ class Wordle:
 
 
     
-    # ****** learn how to change font color in python either by lambda text or colorama
-        # print the guessed word out with following parameters
-            # if guessed word letter is not in chosen word no color change
-            # if guessed word letter is in chosen word but indexes do not match color change to yellow
-            # if guessed word letter is in chosen word AND indexes are the same change to green
+    # ****** learn how to change font color in python with ANSI code
 # asks if the user would like to play again
 
-            
 wordle = Wordle()
 wordle.get_word()
 # wordle.compare_guess()
