@@ -747,7 +747,6 @@ beans
 beany
 beare
 bears
-beast
 beath
 beats
 beaty
@@ -3072,7 +3071,6 @@ firks
 firms
 firns
 firry
-first
 firth
 fiscs
 fisks
@@ -3208,7 +3206,6 @@ fouer
 fouet
 foule
 fouls
-found
 fount
 fours
 fouth
@@ -8190,7 +8187,6 @@ shill
 shily
 shims
 shins
-shiny
 ships
 shirr
 shirs
@@ -8628,7 +8624,6 @@ sough
 souks
 souls
 soums
-sound
 soups
 soupy
 sours
@@ -8651,7 +8646,6 @@ soyas
 soyle
 soyuz
 sozin
-space
 spacy
 spado
 spaed
@@ -8702,7 +8696,6 @@ spews
 spewy
 spial
 spica
-spice
 spick
 spics
 spide
@@ -8768,7 +8761,6 @@ stane
 stang
 staph
 staps
-stare
 starn
 starr
 stars
@@ -9259,7 +9251,6 @@ thali
 thana
 thane
 thang
-thank
 thans
 thanx
 tharm
@@ -9287,7 +9278,6 @@ thigs
 thilk
 thill
 thine
-think
 thins
 thiol
 thirl
@@ -9573,7 +9563,6 @@ trues
 trugo
 trugs
 trull
-trust
 tryer
 tryke
 tryma
