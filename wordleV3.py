@@ -14,6 +14,9 @@ class Wordle:
     def __init__(self):
         self.turns = 6
         self.alphabet = list(string.ascii_uppercase)
+        self.is_playing = True
+        self.play_answer = True
+        self.won_or_lost = False
 
     def display_alphabet(self):
         self.color_alphabet()
@@ -38,9 +41,11 @@ class Wordle:
     
     def get_word(self):
         # gets a random word from a text document
-        with open("words.txt") as read:
-            self.words = list(map(str, read))
-            self.chosen_word = random.choice(self.words).strip().upper()
+        with open("words.txt") as words:
+            self.words = words.read()
+            self.words = self.words.strip().split("\n")
+            self.chosen_word = random.choice(self.words).upper()
+            print(self.chosen_word)
     
     def get_guess(self):
         self.guess = input(f"Turn {self.turns}: ").upper()
@@ -66,7 +71,7 @@ class Wordle:
         print("".join(guess_letters))
 
     def check_guess(self):
-        if self.guess.lower() in self.dictionary or self.words:
+        if self.guess.lower() in self.dictionary or self.guess.lower() in self.words:
                 self.turns -= 1
                 self.is_win()
                 # TODO compare_guess method needs to go here
@@ -84,37 +89,48 @@ class Wordle:
 
     def is_win(self):
         if self.guess == self.chosen_word:
-            self.color_guess()
             print("You Won!")
-            self.play_again()
+            self.won_or_lost = True
+            self.is_playing = False
 
     def is_lose(self):
         if self.turns == 0:
             print("You Lost :(")
             print(f"The word was {self.chosen_word.upper()}")
-            self.play_again()
+            self.won_or_lost = True
+            self.is_playing = False
 
     def play_again(self):
         answer_list = ["Y", "N"]
-        while True:
-            answer = input("Would you like to play again (Y/N)? ").upper()
-            if answer == answer_list[0]:
-                self.gameplay()
-            elif answer == answer_list[1]:
-                print("Thank you for playing!")
-                exit()
-            else:
-                print("Please enter a valid option")
-
-
-    def gameplay(self):
+        answer = input("Would you like to play again (Y/N)? ").upper()
+        self.play_answer = answer == answer_list[0]
+        self.won_or_lost = False
+        self.turns = 6
+        if self.play_answer:
+            self.is_playing = True
+        elif answer == answer_list[1]:
+            print("Thank you for playing!")
+            exit()
+        else:
+            print("Please enter a valid option")
+    
+    def game_logic(self):
         self.get_word()
-        while True:
+        self.check_dictionary()
+        while not self.won_or_lost:
             if self.turns > 0:
                 self.get_guess()
-                self.check_dictionary()
                 self.check_guess()
                 self.is_lose()
+                
+    def game_active(self):
+        while self.is_playing:
+            self.game_logic()
+
+    def gameplay(self):
+        while self.play_answer:
+            self.game_active()
+            self.play_again()
 
 wordle = Wordle()
 wordle.gameplay()
