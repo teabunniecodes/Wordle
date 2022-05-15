@@ -5,10 +5,7 @@ class Color:
     RED = "\033[31m"
     GREEN = "\033[32m"
     YELLOW = "\033[33m"
-    BGREEN = "\u001b[42m"
-    BYELLOW = "\u001b[43m"
     END = "\033[0m"
-    BEND = "\u001b[0m"
 
 class Wordle:
     def __init__(self):
@@ -26,12 +23,13 @@ class Wordle:
         for x, letter in enumerate(self.guess):
             if self.guess[x] == self.chosen_word[x]:
                 self.alphabet = list(map(lambda x: x.replace(letter.upper(), self.set_color(letter.upper(), Color.GREEN)), self.alphabet))
-        
-            elif letter in self.chosen_word and letter.upper() in self.alphabet:
-                self.alphabet = list(map(lambda x: x.replace(letter.upper(), self.set_color(letter.upper(), Color.YELLOW)), self.alphabet))
+
+            elif letter.upper() in self.alphabet:
+                if letter in self.chosen_word:
+                    self.alphabet = list(map(lambda x: x.replace(letter.upper(), self.set_color(letter.upper(), Color.YELLOW)), self.alphabet))
             
-            elif letter not in self.chosen_word and letter.upper() in self.alphabet:
-                self.alphabet = list(map(lambda x: x.replace(letter.upper(), self.set_color(letter.upper(), Color.RED)), self.alphabet))
+                elif letter not in self.chosen_word and letter.upper() in self.alphabet:
+                    self.alphabet = list(map(lambda x: x.replace(letter.upper(), self.set_color(letter.upper(), Color.RED)), self.alphabet))
 
             else:
                 pass
@@ -45,7 +43,6 @@ class Wordle:
             self.words = words.read()
             self.words = self.words.strip().split("\n")
             self.chosen_word = random.choice(self.words).upper()
-            print(self.chosen_word)
     
     def get_guess(self):
         self.guess = input(f"Turn {self.turns}: ").upper()
