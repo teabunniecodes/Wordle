@@ -102,17 +102,19 @@ class Wordle:
 
     def play_again(self):
         answer_list = ["Y", "N"]
-        answer = input("Would you like to play again (Y/N)? ").upper()
-        self.play_answer = answer == answer_list[0]
         self.won_or_lost = False
         self.turns = 6
-        if self.play_answer:
-            self.is_playing = True
-        elif answer == answer_list[1]:
-            print("Thank you for playing!")
-            exit()
-        else:
-            print("Please enter a valid option")
+        while True:
+            answer = input("Would you like to play again (Y/N)? ").upper()
+            self.play_answer = answer == answer_list[0]
+            if self.play_answer:
+                self.is_playing = True
+                break
+            elif answer == answer_list[1]:
+                print("Thank you for playing!")
+                exit()
+            else:
+                print("Please enter a valid option")
     
     def game_logic(self):
         self.get_word()
