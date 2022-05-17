@@ -22,17 +22,17 @@ class Wordle:
     def color_alphabet(self):
         for x, letter in enumerate(self.guess):
             if self.guess[x] == self.chosen_word[x]:
-                self.alphabet = list(map(lambda x: x.replace(letter.upper(), self.set_color(letter.upper(), Color.GREEN)), self.alphabet))
-
+                try:
+                    self.alphabet[self.alphabet.index(letter.upper())] == self.set_color(letter.upper(), Color.GREEN)
+                except:
+                    pass
+                
             elif letter.upper() in self.alphabet:
-                if letter in self.chosen_word:
-                    self.alphabet = list(map(lambda x: x.replace(letter.upper(), self.set_color(letter.upper(), Color.YELLOW)), self.alphabet))
+                if letter in self.chosen_word and self.guess[x] != self.chosen_word[x]:
+                    self.alphabet[self.alphabet.index(letter.upper())] = self.set_color(letter.upper(), Color.YELLOW)
             
                 elif letter not in self.chosen_word and letter.upper() in self.alphabet:
-                    self.alphabet = list(map(lambda x: x.replace(letter.upper(), self.set_color(letter.upper(), Color.RED)), self.alphabet))
-
-            else:
-                pass
+                    self.alphabet[self.alphabet.index(letter.upper())] = self.set_color(letter.upper(), Color.RED)
 
     def set_color(self, text, color):
         return f"{color}{text.upper()}{Color.END}"
