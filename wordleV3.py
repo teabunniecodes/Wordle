@@ -62,12 +62,14 @@ class Wordle:
     def color_guess(self):
         guess_letters = list(self.guess)
         chosen_letters = list(self.chosen_word)
+        # loops through to check which letters are in the correct spots and turns them green
         for x, letter in enumerate(self.guess):
             if guess_letters[x] == self.chosen_word[x]:
                 chosen_letters[x] = "*"
                 guess_letters[x] = self.set_color(letter, Color.GREEN)
-        # for x, letter in enumerate(self.guess):
-            elif letter in chosen_letters:
+        # then loops throught to check if remaining letters are in the word and turns them yellow
+        for x, letter in enumerate(self.guess):
+            if letter in chosen_letters:
                 # need to replace at the index of the letter
                 chosen_letters[chosen_letters.index(letter)] = "*"
                 guess_letters[x] = self.set_color(letter, Color.YELLOW)
