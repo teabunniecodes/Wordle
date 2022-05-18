@@ -69,10 +69,12 @@ class Wordle:
                 guess_letters[x] = self.set_color(letter, Color.GREEN)
         # then loops throught to check if remaining letters are in the word and turns them yellow
         for x, letter in enumerate(self.guess):
-            if letter in chosen_letters:
-                # need to replace at the index of the letter
-                chosen_letters[chosen_letters.index(letter)] = "*"
-                guess_letters[x] = self.set_color(letter, Color.YELLOW)
+            if letter in chosen_letters :
+                # checks to make sure it doesn't override a green letter
+                if self.guess[x] != self.chosen_word[x]:
+                    # need to replace at the index of the letter
+                    chosen_letters[chosen_letters.index(letter)] = "*"
+                    guess_letters[x] = self.set_color(letter, Color.YELLOW)
         print("".join(guess_letters))
 
     def check_guess(self):
