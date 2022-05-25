@@ -12,9 +12,22 @@ class Wordle:
         self.turns = 6
         self.alphabet = list(string.ascii_uppercase)
         self.is_playing = True
-        self.play_answer = True
         self.won_or_lost = False
+        self.load_words()
+        self.load_dictionary()
 
+    def load_dictionary(self):
+        with open("dictionary.txt") as dictionary:
+            self.dictionary = dictionary.read().strip().split("\n")
+
+    def load_words(self):
+        """Load all words from a file into a list."""
+        with open("words.txt") as words:
+            self.words = words.read().strip().split("\n")
+
+    def pick_word(self):
+        self.chosen_word = random.choice(self.words).upper()
+    
     def display_alphabet(self):
         self.color_alphabet()
         print(" ".join(self.alphabet))
@@ -25,39 +38,24 @@ class Wordle:
             index_alpha = ord(letter.upper()) - 65
             # checks if the letter is in the correct place
             if self.guess[x] == self.chosen_word[x]:
-                self.alphabet[index_alpha] = self.set_color(letter.upper(), Color.GREEN)
+                self.alphabet[index_alpha] = self.color_text(letter.upper(), Color.GREEN)
 
             # checks to see if the letter is in the alphabet still (not colored)
             # will always only change to yellow or red on first occurance of the letter
             elif letter.upper() in self.alphabet:
                 # checks if the letter is in the chosen_word
                 if letter in self.chosen_word and self.guess[x] != self.chosen_word[x]:
-                    self.alphabet[index_alpha] = self.set_color(letter.upper(), Color.YELLOW)
+                    self.alphabet[index_alpha] = self.color_text(letter.upper(), Color.YELLOW)
 
                 # if the letter is not in the chosen word
                 else:
-                    self.alphabet[index_alpha] = self.set_color(letter.upper(), Color.RED)
+                    self.alphabet[index_alpha] = self.color_text(letter.upper(), Color.RED)
 
-    def set_color(self, text, color):
+    def color_text(self, text, color):
         return f"{color}{text.upper()}{Color.END}"
-    
-    def get_word(self):
-        # gets a random word from a text document
-        with open("words.txt") as words:
-            self.words = words.read()
-            # create a list of the words
-            self.words = self.words.strip().split("\n")
-            # randomly chooses a word from the list
-            self.chosen_word = random.choice(self.words).upper()
     
     def get_guess(self):
         self.guess = input(f"Turn {self.turns}: ").upper()
-
-    def check_dictionary(self):
-        with open("dictionary.txt") as dictionary:
-            self.dictionary = dictionary.read()
-            #create a list of words from the dictionary
-            self.dictionary = self.dictionary.strip().split("\n")
 
     def color_guess(self):
         guess_letters = list(self.guess)
@@ -66,7 +64,7 @@ class Wordle:
         for x, letter in enumerate(self.guess):
             if guess_letters[x] == self.chosen_word[x]:
                 chosen_letters[x] = "*"
-                guess_letters[x] = self.set_color(letter, Color.GREEN)
+                guess_letters[x] = self.color_text(letter, Color.GREEN)
         # then loops throught to check if remaining letters are in the word and turns them yellow
         for x, letter in enumerate(self.guess):
             if letter in chosen_letters :
@@ -74,7 +72,7 @@ class Wordle:
                 if self.guess[x] != self.chosen_word[x]:
                     # need to replace at the index of the letter
                     chosen_letters[chosen_letters.index(letter)] = "*"
-                    guess_letters[x] = self.set_color(letter, Color.YELLOW)
+                    guess_letters[x] = self.color_text(letter, Color.YELLOW)
         print("".join(guess_letters))
 
     def check_guess(self):
@@ -106,38 +104,41 @@ class Wordle:
             self.won_or_lost = True
             self.is_playing = False
 
+    def read_option(self, prompt, options, retry_msg):
+        """Display prompt, read input, and display retry message until the input is one of the options."""
+        upper_options = [x.upper() for x in options]
+        while True:
+            answer = input(prompt)
+            if answer.upper() in upper_options:
+                return answer
+            else:
+                print(retry_msg)
+
     def play_again(self):
-        answer_list = ["Y", "N"]
         self.won_or_lost = False
         self.turns = 6
-        while True:
-            answer = input("Would you like to play again (Y/N)? ").upper()
-            self.play_answer = answer == answer_list[0]
-            if self.play_answer:
-                self.is_playing = True
-                break
-            elif answer == answer_list[1]:
-                print("Thank you for playing!")
-                exit()
-            else:
-                print("Please enter a valid option")
+        answer_list = ["Y", "N"]
+        answer = self.read_option("Would you like to play again (Y/N)? ", answer_list, "Please enter a valid option")
+        self.is_playing = answer == answer_list[0]
+        if not self.is_playing:
+            print("Thank you for playing!")
+            exit()
     
-    def game_logic(self):
-        self.get_word()
-        self.check_dictionary()
+    def game_round(self):
+        self.pick_word()
         while not self.won_or_lost:
             if self.turns > 0:
                 self.get_guess()
                 self.check_guess()
             self.is_lose()
                 
-    def game_active(self):
+    def game_loop(self):
         while self.is_playing:
-            self.game_logic()
+            self.game_round()
 
     def gameplay(self):
-        while self.play_answer:
-            self.game_active()
+        while self.is_playing:
+            self.game_loop()
             self.play_again()
 
 wordle = Wordle()
