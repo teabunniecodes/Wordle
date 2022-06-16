@@ -1,0 +1,68 @@
+#:kivy 2.1.0
+#:set padding 20
+
+FloatLayout:
+    Label:
+        text: 'Wordle'
+        size_hint: (1, None)
+        height: 50
+        font_size: self.height * .75
+        bold: True
+        pos_hint: {'center_y': .9}
+    GameText:
+        id: game_text
+        size_hint: (1, None)
+        height: 30
+        pos_hint: {'center_y': .83}
+        bold: False
+    Board:
+        id: board
+        pos_hint: {'center_x': .5, 'center_y': .45}
+        size_hint: None, None
+        center: root.center
+        size: [350, 420]
+
+<GameText>:
+    text: root.game_text
+
+<PopupWindow>:
+    orientation: 'vertical'
+    Label:
+        id: popup_text
+        text: 'OMG IT WORKS :D'
+        bold: True
+        font_size: self.height * .5
+        size_hint: (1, .4)
+    Label:
+        id: chosen_word_text
+        text: ''
+        font_size: self.height * .35
+        size_hint: (1, .3)
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, .25)
+        Button:
+            id: yes
+            text: 'Yes'
+            on_release: root.play_again(self)
+        Button:
+            id: no
+            text: 'No'
+            on_release: root.play_again(self)
+<Tile>:
+    canvas:
+        Color:
+            rgb: self.color
+
+        BorderImage:
+            pos: self.pos
+            size: self.size
+            source: 'cell.png'
+
+    Label:
+        pos: root.pos
+        size: root.size
+        bold: True
+        # color: root.number_color
+        font_size: root.font_size
+        text: root.letter_guess
